@@ -1,5 +1,7 @@
 package com.virtusa.demo.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/test")
 public class TestController {
 	@GetMapping("/all")
-	public String allAccess() {
+	public String allAccess(HttpServletResponse httpResponse) throws Exception {
+		httpResponse.sendRedirect("/device");
 		return "Public Content.";
 	}
 	

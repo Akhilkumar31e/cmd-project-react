@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virtusa.demo.model.Device;
 import com.virtusa.demo.repository.DeviceRepository;
 
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin(origins="http://localhost:9090")
 @RestController
 @RequestMapping("/")
 public class DeviceController {

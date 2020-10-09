@@ -26,8 +26,7 @@ public class TestController {
 
 	@GetMapping("/mod")
 	@PreAuthorize("hasRole('MODERATOR')")
-	public String moderatorAccess(HttpServletResponse httpResponse) throws Exception{
-		httpResponse.sendRedirect("/device/recentlyUpdated");
+	public String moderatorAccess() {
 		return "Moderator Board.";
 	}
 

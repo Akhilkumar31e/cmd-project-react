@@ -1,7 +1,5 @@
 package com.virtusa.demo.model;
 
-import java.util.Date;
-
 import javax.persistence.*;
 
 @Entity
@@ -22,28 +20,23 @@ public class Device {
 	private int servicePeriod;
 	
 	@Column(name="receivedDate")
-	private Date receivedDate;
+	private String receivedDate;
 	
 	@Column(name="batteryLevel")
 	private String batteryLevel;
-	
-	@Column(name="lastUpdated")
-	private Date lastUpdated;
-	
-	@Column(name="lastService")
-	private Date lastService;
 	
 	public Device() {
 		
 	}
 
-	public Device(String deviceName, String deviceStatus, int servicePeriod, String batteryLevel) {
+	public Device(String deviceName, String deviceStatus, int servicePeriod, String receivedDate,
+			String batteryLevel) {
 		super();
 		this.deviceName = deviceName;
 		this.deviceStatus = deviceStatus;
 		this.servicePeriod = servicePeriod;
+		this.receivedDate = receivedDate;
 		this.batteryLevel = batteryLevel;
-		this.receivedDate=new Date();
 	}
 
 	public long getDeviceID() {
@@ -74,13 +67,13 @@ public class Device {
 		this.servicePeriod = servicePeriod;
 	}
 
-	public Date getReceivedDate() {
+	public String getReceivedDate() {
 		return receivedDate;
 	}
 
-	/*public void setReceivedDate(Date receivedDate) {
+	public void setReceivedDate(String receivedDate) {
 		this.receivedDate = receivedDate;
-	}*/
+	}
 
 	public String getBatteryLevel() {
 		return batteryLevel;
@@ -89,34 +82,12 @@ public class Device {
 	public void setBatteryLevel(String batteryLevel) {
 		this.batteryLevel = batteryLevel;
 	}
-	
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
-	
-	@PrePersist
-	public void onCreate() {
-		this.receivedDate = new Date();
-	}
 
-	@PreUpdate
-	public void onUpdate() {
-		this.lastUpdated = new Date();
-	}
-
-	public void setLastService() {
-		this.lastService=new Date();
-	}
-	
-	public Date getLastService() {
-		return lastService;
-	}
-	
 	@Override
 	public String toString() {
 		return "Device [deviceID=" + deviceID + ", deviceName=" + deviceName + ", deviceStatus=" + deviceStatus
 				+ ", servicePeriod=" + servicePeriod + ", receivedDate=" + receivedDate + ", batteryLevel="
-				+ batteryLevel + ", lastUpdated=" + lastUpdated + "]";
+				+ batteryLevel + "]";
 	}
 	
 }

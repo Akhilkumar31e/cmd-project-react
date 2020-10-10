@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virtusa.demo.model.Device;
 import com.virtusa.demo.repository.DeviceRepository;
 
-@CrossOrigin(origins="http://localhost:9090")
+
+@CrossOrigin(origins="*")
+
 @RestController
 @RequestMapping("/")
 public class DeviceController {
@@ -50,7 +53,7 @@ public class DeviceController {
 		}
 	}
 	@GetMapping("/device/{id}")
-	  public ResponseEntity<Device> getTutorialById(@PathVariable("id") long id) {
+	  public ResponseEntity<Device> getDeviceById(@PathVariable("id") long id) {
 	    Optional<Device> deviceData = deviceRepository.findById(id);
 
 	    if (deviceData.isPresent()) {
@@ -63,8 +66,8 @@ public class DeviceController {
 	  @PostMapping("/device")
 	  public ResponseEntity<Device> createDevice(@RequestBody Device device) {
 	    try {
-	      Device _device = deviceRepository
-	          .save(new Device(device.getDeviceName(), device.getDeviceStatus(),device.getServicePeriod(),device.getReceivedDate(),device.getBatteryLevel()));
+	      Device _device = deviceRepository.save(new Device(device.getDeviceName(),device.getDeviceStatus(),device.getServicePeriod(),device.getBatteryLevel(),
+	    		  device.getAssetNumber(),device.getModelNumber(),device.getManufactureDate(),device.getOperatingTime(),device.getSerialNumber(),device.getHospital()));
 	      return new ResponseEntity<>(_device, HttpStatus.CREATED);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -80,8 +83,14 @@ public class DeviceController {
 	      _device.setDeviceName(device.getDeviceName());
 	      _device.setDeviceStatus(device.getDeviceStatus());
 	      _device.setServicePeriod(device.getServicePeriod());
-	      _device.setReceivedDate(device.getReceivedDate());
+	      _device.onUpdate();
 	      _device.setBatteryLevel(device.getBatteryLevel());
+	      _device.setAssetNumber(device.getAssetNumber());
+	      _device.setModelNumber(device.getModelNumber());
+	      _device.setManufactureDate(device.getManufactureDate());
+	      _device.setOperatingTime(device.getOperatingTime());
+	      _device.setSerialNumber(device.getSerialNumber());
+	      _device.setHospital(device.getHospital());
 	      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -108,4 +117,70 @@ public class DeviceController {
 	    }
 
 	  }
+	  @GetMapping("/device/repair")
+	  public ResponseEntity<Device> getAllRepairDevices(){
+		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("repair");
+		  if (deviceData.isPresent()) {
+		      return new ResponseEntity<>(deviceData.get(), HttpStatus.OK);
+		    } else {
+		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		   }
+	  }
+	  
+	  @GetMapping("/device/replace")
+	  public ResponseEntity<Device> getAllReplaceDevice(){
+		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("replace");
+		  if(deviceData.isPresent()) {
+			  return new ResponseEntity<>(deviceData.get(),HttpStatus.OK);
+		  }
+		  else {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		  }
+	  }
+	  
+	  @GetMapping("/device/remove")
+	  public ResponseEntity<Device> getAllRemoveDevice(){
+		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("remove");
+		  if(deviceData.isPresent()) {
+			  return new ResponseEntity<>(deviceData.get(),HttpStatus.OK);
+		  }
+		  else {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		  }
+	  }
+	  
+	  @GetMapping("/device/recentlyUpdated")
+	  public ResponseEntity<List<Device>> getRecentlyUpdatedDevice(){
+		  List<Device> deviceData=deviceRepository.findAll(Sort.by("lastUpdated").descending());
+		  if(deviceData.isEmpty()) {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		  }
+		  else {
+			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
+		  }
+	  }
+	  
+	  /*@PutMapping("/device/serviceDone/{id}")
+	  public ResponseEntity<Device> ServiceDevice(@PathVariable("id") long id, @RequestBody Device device) {
+		    Optional<Device> deviceData = deviceRepository.findById(id);
+
+		    if (deviceData.isPresent()) {
+		      Device _device = deviceData.get();
+		      _device.setDeviceName(device.getDeviceName());
+		      _device.setDeviceStatus(device.getDeviceStatus());
+		      _device.setServicePeriod(device.getServicePeriod());
+		      _device.setBatteryLevel(device.getBatteryLevel());
+		      if(device.getLastUpdated()!=null) {
+		    	  _device.setLastUpdate(device.getLastUpdated());
+		      }
+		      if(device.getReceivedDate()!=null) {
+		    	  _device.setReceivedDate(device.getReceivedDate());
+		      }
+		      _device.setLastService();
+		      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
+		    }
+		    else {
+		    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		    }
+	  }*/
 }

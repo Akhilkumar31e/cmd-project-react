@@ -158,6 +158,16 @@ public class DeviceController {
 		  }
 	  }
 	  
+	  @GetMapping("/hospital/{id}/devices")
+	  public ResponseEntity<Device> getDevicesByHospitalID(@PathVariable("id") long id){
+		  Optional<Device> devicesToHospital=deviceRepository.findByHospital(id);
+		  if (devicesToHospital.isPresent()) {
+		      return new ResponseEntity<>(devicesToHospital.get(), HttpStatus.OK);
+		    } else {
+		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		   }
+	  }
+	  
 	  /*@PutMapping("/device/serviceDone/{id}")
 	  public ResponseEntity<Device> ServiceDevice(@PathVariable("id") long id, @RequestBody Device device) {
 		    Optional<Device> deviceData = deviceRepository.findById(id);

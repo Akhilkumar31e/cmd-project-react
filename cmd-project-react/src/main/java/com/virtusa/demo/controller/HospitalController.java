@@ -48,7 +48,7 @@ public class HospitalController {
 		}
 	}
 	@GetMapping("/hospital/{id}")
-	  public ResponseEntity<Hospital> getHospitalById(@PathVariable("id") int id) {
+	  public ResponseEntity<Hospital> getHospitalById(@PathVariable("id") long id) {
 	    Optional<Hospital> hospitalData = hospitalRepository.findById(id);
 
 	    if (hospitalData.isPresent()) {
@@ -68,6 +68,5 @@ public class HospitalController {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	  }
-
 
 }

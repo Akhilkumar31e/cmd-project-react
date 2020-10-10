@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="device")
 public class Device {
@@ -49,9 +51,9 @@ public class Device {
 	@Column(name="serialNumber")
 	private String serialNumber;
 	
-	@NotNull
-	@ManyToOne
-	@JoinColumn
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "HospitalID")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Hospital hospital;
 	
 	public Device() {

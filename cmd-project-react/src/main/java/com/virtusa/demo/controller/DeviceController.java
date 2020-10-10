@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.virtusa.demo.model.Device;
 import com.virtusa.demo.repository.DeviceRepository;
 
-@CrossOrigin(origins="http://localhost:8080")
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/")
 public class DeviceController {
@@ -64,8 +64,8 @@ public class DeviceController {
 	  @PostMapping("/device")
 	  public ResponseEntity<Device> createDevice(@RequestBody Device device) {
 	    try {
-	      Device _device = deviceRepository
-	          .save(new Device(device.getDeviceName(), device.getDeviceStatus(),device.getServicePeriod(),device.getBatteryLevel()));
+	      Device _device = deviceRepository.save(new Device(device.getDeviceName(),device.getDeviceStatus(),device.getServicePeriod(),device.getBatteryLevel(),
+	    		  device.getAssetNumber(),device.getModelNumber(),device.getManufactureDate(),device.getOperatingTime(),device.getSerialNumber(),device.getHospital()));
 	      return new ResponseEntity<>(_device, HttpStatus.CREATED);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,6 +83,12 @@ public class DeviceController {
 	      _device.setServicePeriod(device.getServicePeriod());
 	      _device.onUpdate();
 	      _device.setBatteryLevel(device.getBatteryLevel());
+	      _device.setAssetNumber(device.getAssetNumber());
+	      _device.setModelNumber(device.getModelNumber());
+	      _device.setManufactureDate(device.getManufactureDate());
+	      _device.setOperatingTime(device.getOperatingTime());
+	      _device.setSerialNumber(device.getSerialNumber());
+	      _device.setHospital(device.getHospital());
 	      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -152,8 +158,8 @@ public class DeviceController {
 		  }
 	  }
 	  
-	  /*@PutMapping("/device/servicDone/{id}")
-	  public void ServiceDevice(@PathVariable("id") long id, @RequestBody Device device) {
+	  /*@PutMapping("/device/serviceDone/{id}")
+	  public ResponseEntity<Device> ServiceDevice(@PathVariable("id") long id, @RequestBody Device device) {
 		    Optional<Device> deviceData = deviceRepository.findById(id);
 
 		    if (deviceData.isPresent()) {
@@ -162,7 +168,17 @@ public class DeviceController {
 		      _device.setDeviceStatus(device.getDeviceStatus());
 		      _device.setServicePeriod(device.getServicePeriod());
 		      _device.setBatteryLevel(device.getBatteryLevel());
+		      if(device.getLastUpdated()!=null) {
+		    	  _device.setLastUpdate(device.getLastUpdated());
+		      }
+		      if(device.getReceivedDate()!=null) {
+		    	  _device.setReceivedDate(device.getReceivedDate());
+		      }
 		      _device.setLastService();
+		      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
+		    }
+		    else {
+		    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		    }
 	  }*/
 }

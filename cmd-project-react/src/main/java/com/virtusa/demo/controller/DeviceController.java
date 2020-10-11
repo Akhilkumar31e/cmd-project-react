@@ -131,46 +131,50 @@ public class DeviceController {
 
 	  }
 	  @GetMapping("/device/repair")
-	  public ResponseEntity<Device> getAllRepairDevices(){
-		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("repair");
-		  if (deviceData.isPresent()) {
-		      return new ResponseEntity<>(deviceData.get(), HttpStatus.OK);
-		    } else {
-		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		   }
+	  public ResponseEntity<List<Device>> getAllRepairDevices() {
+		      List<Device> devices = new ArrayList<Device>();
+
+		      deviceRepository.findByDeviceStatus("repair").forEach(devices::add);
+		      if (devices.isEmpty()) {
+		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		      }
+		      return new ResponseEntity<>(devices, HttpStatus.OK);
 	  }
 	  
 	  @GetMapping("/device/replace")
-	  public ResponseEntity<Device> getAllReplaceDevice(){
-		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("replace");
-		  if(deviceData.isPresent()) {
-			  return new ResponseEntity<>(deviceData.get(),HttpStatus.OK);
-		  }
-		  else {
-			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		  }
+	  public ResponseEntity<List<Device>> getAllReplaceDevice(){
+		  List<Device> devices = new ArrayList<Device>();
+
+	        deviceRepository.findByDeviceStatus("replace").forEach(devices::add);
+	      if (devices.isEmpty()) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	      }
+
+	      return new ResponseEntity<>(devices, HttpStatus.OK);
 	  }
 	  
 	  @GetMapping("/device/remove")
-	  public ResponseEntity<Device> getAllRemoveDevice(){
-		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("remove");
-		  if(deviceData.isPresent()) {
-			  return new ResponseEntity<>(deviceData.get(),HttpStatus.OK);
-		  }
-		  else {
-			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		  }
+	  public ResponseEntity<List<Device>> getAllRemoveDevice(){
+		  List<Device> devices = new ArrayList<Device>();
+
+	       deviceRepository.findByDeviceStatus("remove").forEach(devices::add);
+	      if (devices.isEmpty()) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	      }
+
+	      return new ResponseEntity<>(devices, HttpStatus.OK);
 	  }
 	  
 	  @GetMapping("/device/service")
-	  public ResponseEntity<Device> getAllServiceDevice(){
-		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("service");
-		  if(deviceData.isPresent()) {
-			  return new ResponseEntity<>(deviceData.get(),HttpStatus.OK);
-		  }
-		  else {
-			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		  }
+	  public ResponseEntity<List<Device>> getAllServiceDevice(){
+		  List<Device> devices = new ArrayList<Device>();
+
+	        deviceRepository.findByDeviceStatus("service").forEach(devices::add);
+	      if (devices.isEmpty()) {
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	      }
+	      
+	      return new ResponseEntity<>(devices, HttpStatus.OK);
 	  }
 	  
 	  @GetMapping("/device/recentlyUpdated")
@@ -183,16 +187,5 @@ public class DeviceController {
 			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
 		  }
 	  }
-	  
-	  @GetMapping("/hospital/{id}/devices")
-	  public ResponseEntity<Device> getDevicesByHospitalID(@PathVariable("id") long id){
-		  Optional<Device> devicesToHospital=deviceRepository.findByHospital(id);
-		  if (devicesToHospital.isPresent()) {
-		      return new ResponseEntity<>(devicesToHospital.get(), HttpStatus.OK);
-		    } else {
-		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		   }
-	  }
-	  
-	  
+
 }

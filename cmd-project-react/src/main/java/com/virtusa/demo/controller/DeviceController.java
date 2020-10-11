@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.virtusa.demo.model.Device;
-import com.virtusa.demo.model.Hospital;
 import com.virtusa.demo.repository.DeviceRepository;
 
 
@@ -191,5 +189,4 @@ public class DeviceController {
 			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
 		  }
 	  }
-
 }

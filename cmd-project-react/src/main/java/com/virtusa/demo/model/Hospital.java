@@ -1,19 +1,13 @@
 package com.virtusa.demo.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="hospital")
@@ -31,22 +25,6 @@ public class Hospital {
 	private String Locality;
 	private String Pincode;
 	
-	@OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
-	@JsonBackReference
-    private Set<Device> devices = new HashSet<>();
-	
-	public Set<Device> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(Set<Device> devices) {
-        this.devices = devices;
-
-        for(Device d : devices) {
-            d.setHospital(this);
-        }
-    }
-    
 	public Hospital() {
 		
 	}

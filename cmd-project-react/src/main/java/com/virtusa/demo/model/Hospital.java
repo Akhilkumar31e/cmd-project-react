@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="hospital")
 public class Hospital {
@@ -30,6 +32,7 @@ public class Hospital {
 	private String Pincode;
 	
 	@OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
+	@JsonBackReference
     private Set<Device> devices = new HashSet<>();
 	
 	public Set<Device> getDevices() {

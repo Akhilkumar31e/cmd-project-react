@@ -137,7 +137,7 @@ public class DeviceController {
 			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		  }
 	  }
-	  
+
 	  @GetMapping("/device/remove")
 	  public ResponseEntity<Device> getAllRemoveDevice(){
 		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("remove");

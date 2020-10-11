@@ -80,7 +80,6 @@ public class DeviceController {
 	      Device _device = deviceData.get();
 	      _device.setDeviceName(device.getDeviceName());
 	      _device.setDeviceStatus(device.getDeviceStatus());
-	      _device.setServicePeriod(device.getServicePeriod());
 	      _device.onUpdate();
 	      _device.setBatteryLevel(device.getBatteryLevel());
 	      _device.setAssetNumber(device.getAssetNumber());
@@ -94,7 +93,23 @@ public class DeviceController {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	  }
+	  
+	  @PutMapping("/device/status/{id}")
+	  public ResponseEntity<Device> updateStatus(@PathVariable("id") long id, @RequestBody Device device) {
+		    Optional<Device> deviceData = deviceRepository.findById(id);
 
+		    if (deviceData.isPresent()) {
+		      Device _device = deviceData.get();
+		      _device.setDeviceStatus(device.getDeviceStatus());
+		      _device.onUpdate();
+		      _device.setBatteryLevel(device.getBatteryLevel());
+		      _device.setOperatingTime(device.getOperatingTime());
+		      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
+		    } else {
+		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		    }
+		  }
+	  
 	  @DeleteMapping("/device/{id}")
 	  public ResponseEntity<HttpStatus> deleteDevice(@PathVariable("id") long id) {
 	    try {
@@ -147,6 +162,17 @@ public class DeviceController {
 		  }
 	  }
 	  
+	  @GetMapping("/device/service")
+	  public ResponseEntity<Device> getAllServiceDevice(){
+		  Optional<Device> deviceData=deviceRepository.findByDeviceStatus("service");
+		  if(deviceData.isPresent()) {
+			  return new ResponseEntity<>(deviceData.get(),HttpStatus.OK);
+		  }
+		  else {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		  }
+	  }
+	  
 	  @GetMapping("/device/recentlyUpdated")
 	  public ResponseEntity<List<Device>> getRecentlyUpdatedDevice(){
 		  List<Device> deviceData=deviceRepository.findAll(Sort.by("lastUpdated").descending());
@@ -168,27 +194,5 @@ public class DeviceController {
 		   }
 	  }
 	  
-	  /*@PutMapping("/device/serviceDone/{id}")
-	  public ResponseEntity<Device> ServiceDevice(@PathVariable("id") long id, @RequestBody Device device) {
-		    Optional<Device> deviceData = deviceRepository.findById(id);
-
-		    if (deviceData.isPresent()) {
-		      Device _device = deviceData.get();
-		      _device.setDeviceName(device.getDeviceName());
-		      _device.setDeviceStatus(device.getDeviceStatus());
-		      _device.setServicePeriod(device.getServicePeriod());
-		      _device.setBatteryLevel(device.getBatteryLevel());
-		      if(device.getLastUpdated()!=null) {
-		    	  _device.setLastUpdate(device.getLastUpdated());
-		      }
-		      if(device.getReceivedDate()!=null) {
-		    	  _device.setReceivedDate(device.getReceivedDate());
-		      }
-		      _device.setLastService();
-		      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
-		    }
-		    else {
-		    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		    }
-	  }*/
+	  
 }

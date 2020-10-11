@@ -10,4 +10,6 @@ import com.virtusa.demo.model.Device;
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 	Optional<Device> findByDeviceStatus(String deviceStatus);
 	List<Device> findByDeviceName(String deviceName);
+	
+	Optional<Device> findByHospital(long hospital);
 }

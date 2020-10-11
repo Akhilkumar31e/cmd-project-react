@@ -5,9 +5,6 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name="device")
 public class Device {
@@ -54,8 +51,6 @@ public class Device {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "HospitalID")
-	@JsonManagedReference
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Hospital hospital;
 	
 	public Device() {
@@ -126,10 +121,10 @@ public class Device {
 		return lastUpdated;
 	}
 	
-	public void setLastUpdate(Date lastUpdated) {
+	/*public void setLastUpdate(Date lastUpdated) {
 		this.lastUpdated=lastUpdated;
 	}
-	
+	*/
 	@PrePersist
 	public void onCreate() {
 		this.receivedDate = new Date();

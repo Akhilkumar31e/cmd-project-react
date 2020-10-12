@@ -187,4 +187,15 @@ public class DeviceController {
 			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
 		  }
 	  }
+	  
+	  /*@GetMapping("/device/hospital/{id}")
+	  public ResponseEntity<List<Device>> getDevicesByHospital(@RequestBody Hospital hospital){
+		  List<Device> deviceData=deviceRepository.findByHospital(hospital);
+		  if(deviceData.isEmpty()) {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		  }
+		  else {
+			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
+		  }
+	  }*/
 }

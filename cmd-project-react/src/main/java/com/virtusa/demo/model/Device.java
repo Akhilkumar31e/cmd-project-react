@@ -190,7 +190,7 @@ public class Device {
 	public void setHospital(Hospital hospital) {
 		this.hospital = hospital;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Device [deviceID=" + deviceID + ", deviceName=" + deviceName + ", deviceStatus=" + deviceStatus

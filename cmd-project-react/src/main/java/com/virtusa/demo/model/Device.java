@@ -1,6 +1,9 @@
 package com.virtusa.demo.model;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -53,12 +56,15 @@ public class Device {
     @JoinColumn(name = "HospitalID")
 	private Hospital hospital;
 	
+	@OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private Set<TechnicianDevice> technicianDevice;
+	
 	public Device() {
 		
 	}
 
 	public Device(String deviceName, String deviceStatus, int servicePeriod,String batteryLevel, String assetNumber, String modelNumber,
-			String manufactureDate, Integer operatingTime, String serialNumber, @NotNull Hospital hospital) {
+			String manufactureDate, Integer operatingTime, String serialNumber, @NotNull Hospital hospital,TechnicianDevice... technicianDevices) {
 		super();
 		this.deviceName = deviceName;
 		this.deviceStatus = deviceStatus;
@@ -71,6 +77,13 @@ public class Device {
 		this.serialNumber = serialNumber;
 		this.hospital = hospital;
 		this.receivedDate=new Date();
+		for(TechnicianDevice technicianDevice : technicianDevices) technicianDevice.setDevice(this);
+        this.technicianDevice = Stream.of(technicianDevices).collect(Collectors.toSet());
+	}
+	
+	public void setTechnicanDevices(TechnicianDevice... technicianDevices) {
+		for(TechnicianDevice technicianDevice : technicianDevices) technicianDevice.setDevice(this);
+        this.technicianDevice = Stream.of(technicianDevices).collect(Collectors.toSet());
 	}
 
 	public long getDeviceID() {

@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.virtusa.demo.model.Device;
+import com.virtusa.demo.model.TechnicianDevice;
+import com.virtusa.demo.model.User;
 import com.virtusa.demo.repository.DeviceRepository;
+import com.virtusa.demo.repository.UserRepository;
+import com.virtusa.demo.security.services.UserDetailsImpl;
 
 
 @CrossOrigin(origins="*")
@@ -31,6 +39,9 @@ public class DeviceController {
 	
 	@Autowired
 	DeviceRepository deviceRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 	
 	@GetMapping("/device")
 	public ResponseEntity<List<Device>> getAllDevices(@RequestParam(required=false)String name){
@@ -110,7 +121,30 @@ public class DeviceController {
 		    } else {
 		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		    }
+	  }
+	  
+	  /*@PutMapping("/device/assignUser/{id}")
+	  public ResponseEntity<TechnicianDevice> assginUser(@PathVariable("id") long id, @RequestBody Device device){
+		  Object principal=SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		  String username;
+		  if(principal instanceof UserDetails) {
+			  username=((UserDetails)principal).getUsername();
+		  }else {
+			  username=principal.toString();
 		  }
+		  User user = userRepository.findByUsername(username)
+					.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+		  TechnicianDevice techDevice=new TechnicianDevice(user);
+		  
+		  Optional<Device> deviceData = deviceRepository.findById(id);
+		  if(deviceData.isPresent()) {
+			  Device _device=deviceData.get();
+			  techDevice.setDevice(_device);
+			  _device.setTechnicanDevices(techDevice);
+			  return new ResponseEntity<>(techDevice,HttpStatus.OK);
+		  }
+		  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	  }*/
 	  
 	  @DeleteMapping("/device/{id}")
 	  public ResponseEntity<HttpStatus> deleteDevice(@PathVariable("id") long id) {
@@ -189,4 +223,15 @@ public class DeviceController {
 			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
 		  }
 	  }
+	  
+	  /*@GetMapping("/device/hospital/{id}")
+	  public ResponseEntity<List<Device>> getDevicesByHospital(@RequestBody Hospital hospital){
+		  List<Device> deviceData=deviceRepository.findByHospital(hospital);
+		  if(deviceData.isEmpty()) {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		  }
+		  else {
+			  return new ResponseEntity<>(deviceData,HttpStatus.OK);
+		  }
+	  }*/
 }

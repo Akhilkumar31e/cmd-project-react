@@ -117,6 +117,7 @@ public class DeviceController {
 		      _device.onUpdate();
 		      _device.setBatteryLevel(device.getBatteryLevel());
 		      _device.setOperatingTime(device.getOperatingTime());
+		      _device.setLastService();
 		      return new ResponseEntity<>(deviceRepository.save(_device), HttpStatus.OK);
 		    } else {
 		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
